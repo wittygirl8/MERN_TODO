@@ -1,20 +1,20 @@
 const express = require('express');
+const dotenv = require('dotenv')
 const app = express();
-const PORT= 3000;
-const mongoose = require('mongoose');
 
-const DB = 'mongodb+srv://riddhi:riddhi@cluster0.sqnri.mongodb.net/mernstack?retryWrites=true&w=majority'
-//riddhi
-mongoose.connect(DB,{
-    useNewUrlParser: true,
-    useCreateIndex: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false
-}).then(() =>{
-    console.log('Connection Successful.');
-}).catch(
-    (err) => console.log(`No connection.`)
-);
+dotenv.config({ path: './config.env' });
+
+
+//importing connection from differnt module
+require('./db/conn');
+//importing userSchema
+//const User = require('./model/userSchema');
+
+app.use(express.json());
+//router file using middlewares
+app.use(require('./router/auth'));
+const PORT = process.env.PORT;
+
 
 
 //Middelware
@@ -36,10 +36,6 @@ app.get('/login', (req,res)=>{
 });
 
 
-app.get('/register', (req,res)=>{
-    res.send('Hello world register the server');
-});
-
-app.listen(3000, ()=>{
+app.listen(PORT, ()=>{
     console.log(`Server is running at port ${PORT}`)
 })
