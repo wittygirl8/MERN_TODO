@@ -111,4 +111,24 @@ router.post('/signin', async (req, res) => {
     }
 })
 
+//Create Tasks
+router.post('/add-task', async (req, res) => {
+    console.log(req.body);
+    
+    const user = await User.findOne({ email: email });
+    try {
+        const { task } = req.body;
+        if( !task ){
+            return res.status(400).json({error:"Required"})
+        }
+        else{
+            User.todos.insertOne(task);
+            res.json({message:"Task Added successfully"});
+        }
+    }
+    catch(err){
+        console.log(err);
+    }
+})
+
 module.exports=router;

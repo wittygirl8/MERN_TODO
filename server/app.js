@@ -31,7 +31,11 @@ app.get('/todo', middleware, (req,res)=>{
     res.send('Hello todo-list from the server');
 });
 
-app.get('/login', (req,res)=>{
+app.get('/add-task', middleware, (req,res)=>{
+    res.send('Hello add-task-list from the server');
+});
+
+app.get('/signin', (req,res)=>{
     res.send('Hello login from the server');
 });
 

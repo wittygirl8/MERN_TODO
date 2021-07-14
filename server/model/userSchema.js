@@ -7,7 +7,11 @@ const userSchema = new mongoose.Schema({
     phone: { type: Number, required: true },
     password: { type: String, required: true },
     cpassword: { type: String, required: true },
-    todo: { type: Array },
+    todos: [
+     {
+      task:{ type: String, required: true }
+     }
+    ],
     tokens:[
       {
         token:{ type: String, required: true}
