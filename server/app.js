@@ -15,13 +15,11 @@ app.use(express.json());
 app.use(require('./router/auth'));
 const PORT = process.env.PORT;
 
-
-
 //Middelware
-const middleware = (req, res, next) => {
-    console.log(`Hello My Middleware.`);
-    next();
-}
+// const middleware = (req, res, next) => {
+//     console.log(`Hello My Middleware.`);
+//     next();
+// }
 
 app.get('/', (req,res)=>{
     res.send('Hello todo from the server');
@@ -37,6 +35,10 @@ app.get('/add-task', middleware, (req,res)=>{
 
 app.get('/signin', (req,res)=>{
     res.send('Hello login from the server');
+});
+
+app.get('/register', (req,res)=>{
+    res.send('Hello register from the server');
 });
 
 

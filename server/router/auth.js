@@ -131,4 +131,10 @@ router.post('/add-task', async (req, res) => {
     }
 })
 
+
+//ToDO page 
+router.get('/todo', authenticate, (req,res)=>{
+    res.send('Hello todo-list from the server');
+});
+
 module.exports=router;

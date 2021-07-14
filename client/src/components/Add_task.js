@@ -8,6 +8,13 @@ const Add_task = () => {
                     <div className = "signup-content">
                         <div className = "signup-form">
                             <h2 className = "form-title"> ADD TASK </h2>
+                            <div className="col-md-6">
+                                <div className="profile-head">
+                                    <h5>Riddhi </h5>
+                                    <h6>riddhisi.it@gmail.com</h6>
+                                </div>
+                            </div>
+                            
                             <form className = "register-form" if="register-form">
         
                                 <div className = "form-group">

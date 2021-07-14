@@ -13,9 +13,8 @@ const todo = () => {
                                     <h5>Riddhi </h5>
                                     <h6>riddhisi.it@gmail.com</h6>
                                 </div>
-                                
-                                
                             </div>
+                            
                             <form className = "register-form" if="register-form">
         
                                 <div className = "form-group">
