@@ -1,4 +1,6 @@
 const express = require('express');
+const cors = require('cors');
+const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv')
 const app = express();
 
@@ -10,37 +12,17 @@ require('./db/conn');
 //importing userSchema
 //const User = require('./model/userSchema');
 
+app.use(cors());
+app.use(cookieParser());
 app.use(express.json());
+
 //router file using middlewares
 app.use(require('./router/auth'));
 const PORT = process.env.PORT;
 
-//Middelware
-// const middleware = (req, res, next) => {
-//     console.log(`Hello My Middleware.`);
-//     next();
-// }
-
 app.get('/', (req,res)=>{
     res.send('Hello todo from the server');
 });
-
-app.get('/todo', middleware, (req,res)=>{
-    res.send('Hello todo-list from the server');
-});
-
-app.get('/add-task', middleware, (req,res)=>{
-    res.send('Hello add-task-list from the server');
-});
-
-app.get('/signin', (req,res)=>{
-    res.send('Hello login from the server');
-});
-
-app.get('/register', (req,res)=>{
-    res.send('Hello register from the server');
-});
-
 
 app.listen(PORT, ()=>{
     console.log(`Server is running at port ${PORT}`)

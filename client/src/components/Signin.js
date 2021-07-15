@@ -10,7 +10,7 @@ const Signin = () => {
     const loginUser = async(e) =>{
         e.preventDefault();
 
-        const res = await fetch('/signin', {
+        const res = await fetch('/login', {
             method:"POST",
             headers:{
                 "Content-Type":"application/json"
@@ -30,7 +30,7 @@ const Signin = () => {
             window.alert("Login Successfull")
             console.log("Successfull Login");
 
-            history.push("/");
+            history.push("/todolist");
         }
     }
 

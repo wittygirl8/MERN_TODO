@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
+const authenticate = require("../middleware/authenticate");
 
 //Database Connection
 require('../db/conn');
@@ -73,7 +74,7 @@ router.post('/register', async (req,res)=>{
 
 //login route
 
-router.post('/signin', async (req, res) => {
+router.post('/login', async (req, res) => {
     // console.log(req.body);
     // res.json({message:"login awsome"});
     let token;
@@ -103,38 +104,34 @@ router.post('/signin', async (req, res) => {
             }
         }
         else{
-            res.status(400).json({error:"Invalid Credential"})
+            res.status(400).json({error:"Requiered"})
         }
     }
     catch(err){
         console.log(err);
     }
-})
-
-//Create Tasks
-router.post('/add-task', async (req, res) => {
-    console.log(req.body);
-    
-    const user = await User.findOne({ email: email });
-    try {
-        const { task } = req.body;
-        if( !task ){
-            return res.status(400).json({error:"Required"})
-        }
-        else{
-            User.todos.insertOne(task);
-            res.json({message:"Task Added successfully"});
-        }
-    }
-    catch(err){
-        console.log(err);
-    }
-})
-
+});
 
 //ToDO page 
 router.get('/todo', authenticate, (req,res)=>{
-    res.send('Hello todo-list from the server');
+    console.log('TODO PAGE');
+    res.send(req.rootUser);
 });
 
+router.post('/add-task', authenticate, async(req,res)=>{
+    console.log('ADD Task Page PAGE');
+    const { task } = req.body;
+    if( !task ){
+        console.log("Field is Required");
+        return res.status(422).json({error:"Field is Required"})
+        }
+    try{
+        const addedtask = await req.rootUser.addTask(task);
+        console.log(addedtask);
+    }catch(err){
+        return res.status(422).json({error:"Field is ADD Task"})
+    }
+
+    res.send(addedtask);
+});
 module.exports=router;

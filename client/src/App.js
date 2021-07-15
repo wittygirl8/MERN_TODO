@@ -10,17 +10,16 @@ import Signup from './components/Signup';
 function App() {
   return (
     <>
-      <Navbar/>
-
+    <Navbar/>
       <Route exact path="/">
-        <Home/>
+        <Signup/>
       </Route>
 
-      <Route path="/todo">
+      <Route path="/todolist">
         <Todo/>
       </Route>
 
-      <Route path="/add-task">
+      <Route path="/addtask">
         <Add_Task/>
       </Route>
 
