@@ -11,14 +11,9 @@ const userSchema = new mongoose.Schema({
       {
         token:{ type: String, required: true}
       }
-    ],
-    todos: [
-      {
-       task:{ type: String, required: true }
-      }
-     ]
+    ]
   });
-
+  
   //Token generation
 
   userSchema.methods.generateAuthToken = async function(){
@@ -43,7 +38,4 @@ const userSchema = new mongoose.Schema({
       console.log(err);
     }
   }
-
-
-  module.exports = mongoose.model('USER', userSchema);
-
+  module.exports = mongoose.model('USER', userSchema)

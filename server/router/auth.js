@@ -6,6 +6,7 @@ const authenticate = require("../middleware/authenticate");
 //Database Connection
 require('../db/conn');
 const User = require('../model/userSchema');
+const Task = require('../model/todoSchema');
 
 
 router.get('/', (req,res)=>{
@@ -73,7 +74,6 @@ router.post('/register', async (req,res)=>{
 
 
 //login route
-
 router.post('/login', async (req, res) => {
     // console.log(req.body);
     // res.json({message:"login awsome"});
@@ -113,25 +113,69 @@ router.post('/login', async (req, res) => {
 });
 
 //ToDO page 
-router.get('/todo', authenticate, (req,res)=>{
+router.get('/todo-task', authenticate, async(req,res)=>{
     console.log('TODO PAGE');
-    res.send(req.rootUser);
+    const user_id = req.userID;
+    const userExist = await Task.find({ user_id: user_id })
+    res.send(userExist);
 });
 
-router.post('/add-task', authenticate, async(req,res)=>{
+//ADD DATA
+router.post('/add-todo-task', authenticate,async (req,res)=>{
+    console.log(req.userID);
+    const user_id = req.userID;
+    var {task} = req.body;
+    task = task.toLowerCase();
     console.log('ADD Task Page PAGE');
-    const { task } = req.body;
-    if( !task ){
+    console.log(user_id, task)
+    if( !user_id || !task ){
         console.log("Field is Required");
         return res.status(422).json({error:"Field is Required"})
         }
-    try{
-        const addedtask = await req.rootUser.addTask(task);
-        console.log(addedtask);
-    }catch(err){
-        return res.status(422).json({error:"Field is ADD Task"})
-    }
 
-    res.send(addedtask);
+    //Feeding task of a user in mongoDB Todo User 
+
+    try{
+            const user = new Task({user_id:user_id, task_name:task})
+        
+            const userRegister = await user.save();
+            if(userRegister){
+                res.status(201).json({message: "Data Added successfully."})
+            }
+            else{
+                res.status(500).json({ error: "Failed to Add Data."})
+            }
+    }
+    catch(err){
+        console.log(err);
+    }
+});
+
+//EDIT DATA
+router.put('/edit-task', authenticate, async(req,res)=>{
+    console.log('EDIT Task Page PAGE');
+    var { oldTaskName, newTaskName } = req.body;
+    console.log(req.body);
+    if( !oldTaskName|| !newTaskName ){
+        console.log("Field is Required");
+        return res.status(422).json({error:"Field is Required"});
+        }
+    const user = req.userID;
+    console.log(req.body);
+    console.log("oldTaskName", oldTaskName);
+    console.log("newTaskName", newTaskName);
+    const updatedTask =  await Task.findOneAndReplace({task_name:oldTaskName.toLowerCase()}, {user_id:user, task_name:newTaskName.toLowerCase()});
+    console.log(updatedTask);
+    res.send(updatedTask);
+});
+
+router.delete('/delete-task',  async(req,res)=>{
+    console.log("In delete.");
+    var { taskName } = req.body;
+    console.log(req.body);
+    console.log("taskName:",taskName);
+    const deletedTask =  await Task.findOneAndDelete({task_name:taskName.toLowerCase()});
+    console.log(deletedTask);
+    res.send(deletedTask);
 });
 module.exports=router;

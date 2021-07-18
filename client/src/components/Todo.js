@@ -1,22 +1,30 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink, useHistory } from "react-router-dom";
 
 const Todo = () => {
 
     const history = useHistory();
+    const [userTask, setUserTask] = useState([]);
+    
+    const [taskID, setTaskID] = useState('');
+    const [taskName, setTask] = useState('');
+    const [updatedTask, setUpdated] = useState('');
+    
     const callTodoPage = async () =>{
         try{
-            const res = await fetch('/todo', {
+            const res = await fetch('/todo-task', {
                 method:"GET",
                 headers:{
                     Accept: "application/json",
-                    "Content-Type":"application/json"
+                    "Content-Type" : "application/json"
                 },
                 credentials:"include"
             });
             const data = await res.json();
             console.log(data);
-
+            //setUserData(data);
+            setUserTask(data);
+            console.log(userTask);
             if(!res.status === 200 ){
                 const error = new Error(res.error);
                 throw error;
@@ -27,11 +35,39 @@ const Todo = () => {
         }
     }
 
+
     useEffect(() => {
             callTodoPage();
     }, []);
 
-    return (
+    const delTodo = async (e) =>{
+        e.preventDefault();
+        try{
+            const res = await fetch('/delete-task', {
+                method:"DELETE",
+                headers:{
+                    "Content-Type" : "application/json"
+                },body:JSON.stringify({
+                    taskID,
+                    taskName
+                })
+            });
+            const data = await res.json();
+            console.log(data);
+            if(res.status === 400 || !data ){
+                window.alert("ERROR!")
+                console.log("ERROR!");
+            }
+            else{
+                window.alert("Deleted Successfully");
+                console.log("Deleted Successfully");
+            }
+        }catch(err){
+            console.log(err);
+            history.push('/todolist')
+        }
+    }
+       return (
         <>
             <section className = "signup">
             <div className = "container mt-5">
@@ -40,20 +76,28 @@ const Todo = () => {
                             <h2 className = "form-title"> TODO </h2>
                             
                             <form method = "GET" className = "register-form" if="register-form">
-                                <div className="col-md-6">
-                                    <div className="profile-head">
-                                        <h5>Riddhi </h5>
-                                        <h6>riddhisi.it@gmail.com</h6>
-                                    </div>
-                                </div>
-        
-                                <div className = "form-group">
-                                    <input type="text" name="email" id="email" autoComplete="off" placeholder="Your email"/>
-                                </div>
+                                <table className="table table-bordered">  
+                                    <tr>  
+                                        <th>Tasks</th>  
+                                    </tr>  
+                            
+                                    {userTask.map((task, index) => (  
+                                    <tr data-index={index}>  
+                                        <td>{index+1}</td> 
+                                        <td>{task.task_name}
+                                        </td>
+                                        <td>
+                                            <NavLink to="/editTask" className = "signup-image-link">
+                                                <input type="submit" name="edit" id="edit" className="form-submit" value="   EDIT  " />
+                                            </NavLink>
+                                            <NavLink to="/deleteTask" className = "signup-image-link">
+                                                <input type="submit" name="signup" id="signup" className="form-submit" value=" Delete "/>
+                                                </NavLink>
+                                        </td>  
+                                    </tr>  
+                                    ))}  
 
-                                <div className = "form-group">
-                                    <input type="text" name="password" id="password" autoComplete="off" placeholder="Your password"/>
-                                </div>
+                                </table>
                                 <NavLink to="/addtask" className = "signup-image-link">
                                 <div className = "form-group form-button">
                                     <input type="submit" name="signup" id="signup" className="form-submit" value="Add Task"/>
@@ -69,3 +113,4 @@ const Todo = () => {
 }
 
 export default Todo;
+

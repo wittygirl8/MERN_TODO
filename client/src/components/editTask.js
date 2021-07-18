@@ -1,11 +1,11 @@
 import React, {  useState } from 'react';
 import { NavLink, useHistory } from "react-router-dom";
 
-const Add_task = () => {
-
+const EditTask = () => {
     const history = useHistory();
     const [user, setUser] = useState({
-        task: ""
+        oldTaskName:"",
+        newTaskName: ""
     });
 
     let name, value;
@@ -17,33 +17,34 @@ const Add_task = () => {
         setUser({ ...user, [name]: value});
     }
 
-    const callAddTodoPage = async (e) =>{
+    const callEditPage = async (e) =>{
         e.preventDefault();
 
         //Object Destructuring
-        const { task } = user;
+        const { oldTaskName, newTaskName } = user;
 
         try{
-            const res = await fetch('/add-todo-task', {
-                method:"POST",
+            const res = await fetch('/edit-task', {
+                method:"PUT",
                 headers:{
                     "Content-Type" : "application/json"
                 },
                 body:JSON.stringify({
-                    task
+                    oldTaskName,
+                    newTaskName
                 })
             });
             const data = await res.json();
             console.log(data);
 
             if(res.status === 422 || !data ){
-                window.alert("Invalid registration")
-                console.log("Invalid registration");
+                window.alert("Invalid.")
+                console.log("Invalid TRY. ");
             }
             else{
-                window.alert("Data Added Successfully")
-                console.log("Data Added Successfully");
-                history.push('/todolist');
+                window.alert("Updated Successfully")
+                console.log("Updated Successfully");
+                history.push('/todolist')
             }
             if(!res.status === 200 ){
                 const error = new Error(res.error);
@@ -51,27 +52,34 @@ const Add_task = () => {
             }
         }catch(err){
             console.log(err);
-            history.push('/signin')
+            history.push('/todolist')
         }
     }
+    
+
     return (
         <>
            <section className = "signup">
                 <div className = "container mt-5">
                     <div className = "signup-content">
-                    <h2 className = "form-title"> ADD TASK </h2>
+                    <h2 className = "form-title"> EDIT TASK </h2>
                         <div className = "signup-form">
-                        <form method="POST" className = "register-form" if="register-form">                                 
+                        <form method="POST" className = "register-form" if="register-form"> 
+                                                    
                                 <div className = "form-group">
-                                    <input type="text" name="task" id="task" autoComplete="off" placeholder="Your task"
-                                    value = {user.task}
+                                    <input type="text" name="oldTaskName" id="oldTaskName" autoComplete="off" placeholder="OLD Task Name"
+                                        value = {user.oldTaskName}
+                                    onChange = {handleInputs} />
+                                </div>
+                                <div className = "form-group">
+                                    <input type="text" name="newTaskName" id="newTaskName" autoComplete="offvrbvrbgb" placeholder="Upadation Task Name"
+                                        value = {user.newTaskName}
                                     onChange = {handleInputs} />
                                 </div>
 
                                 <div className = "form-group form-button">
-                                    
-                                    <input type="submit" name="signup" id="signup" className="form-submit" value="ADD" 
-                                    onClick = {callAddTodoPage}/>
+                                    <input type="submit" name="update" id="update" className="form-submit" value="UPDATE" 
+                                    onClick = {callEditPage}/>
                                 </div>
                                 <NavLink to="/todolist" className = "signup-image-link">See Your ToDo</NavLink>
                             </form>
@@ -82,4 +90,5 @@ const Add_task = () => {
         </>
     )
 }
-export default Add_task;
+
+export default EditTask;
