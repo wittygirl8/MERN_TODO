@@ -261,4 +261,9 @@ background: #888!important;
   padding: 18%;
   color: whitesmoke;
 }
+.err-msg{
+  font-size: 12px;
+  color: #df4930;
+  width: 100%;
+}
 

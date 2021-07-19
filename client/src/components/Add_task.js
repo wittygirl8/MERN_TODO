@@ -66,6 +66,10 @@ const Add_task = () => {
                                     <input type="text" name="task" id="task" autoComplete="off" placeholder="Your task"
                                     value = {user.task}
                                     onChange = {handleInputs} />
+                                    <NavLink to="/todolist" className = "signup-image-link">
+                                            <input type="Submit" name="cancel" id="cancel" 
+                                                value = "cancel" />
+                                    </NavLink>
                                 </div>
 
                                 <div className = "form-group form-button">

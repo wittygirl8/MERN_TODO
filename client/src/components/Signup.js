@@ -7,6 +7,12 @@ const Signup = () => {
     const [user, setUser] = useState({
         name: "", email:"", phone:"",password:"",cpassword:""
     });
+    const [userError, setUserError] = useState('');
+    const [contactError, setContactError] = useState('');
+    const [emailError, setEmailError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+    const [cpasswordError, csetPasswordError] = useState('');     
+    
 
     let name, value;
     const handleInputs = (e) => {
@@ -23,18 +29,50 @@ const Signup = () => {
         //Object Destructuring
         const { name, email, phone,password,cpassword } = user;
 
-        if((email.indexOf('@')<=0) || (email.charAt(email.length - 4)!=".")&&(email.charAt(email.length - 4)!=".")){
-            window.alert("Invalid Mail");
-            return false;
+        setPasswordError('');
+
+        if(name!=='')
+            setUserError('');
+        else
+            setUserError('Required');
+        if(email !==''){
+            setEmailError('');
+            if((email.indexOf('@')<=0) || (email.charAt(email.length - 4)!=".")&&(email.charAt(email.length - 4)!=".")){
+                setEmailError('Invalid Email');
+                return false;
+            }
         }
-        if(password != cpassword){
-            window.alert("password doesn't match with current password");
-            return false;
+        else{
+            setEmailError('Required');
         }
-        if(password.length<6){
-            window.alert("password mus be minimum 6 digit long");
-            return false;
+        if(phone!==''){
+            if(phone.length<10){
+                setContactError('phone number must be 10 digit long');
+            }
+            setContactError('');
         }
+        else
+            setContactError('Required');
+        
+        if(password !== ''){
+            if(password.length<6){
+                setPasswordError('password must be minimum 6 digit long');
+                return false;
+            }
+        }
+        else
+            setPasswordError('Required');
+
+        if(cpassword !== ''){
+            if(password !== cpassword){
+                csetPasswordError('password doesn\'t match with conform password');
+                return false;
+            }
+        }
+        else
+            csetPasswordError('Required');
+        
+        
 
         const res = await fetch("/register", {
             method:"POST",
@@ -70,13 +108,16 @@ const Signup = () => {
                             <form method = "POST" className = "register-form" if="register-form">
                                 
                             <div className = "form-group">
+                                    {userError&&<div className="err-msg">{userError}</div>}
                                     <input type="text" name="name" id="name" autoComplete="off"
                                     value = {user.name}
                                     onChange = {handleInputs} 
                                     placeholder="Your Name"/>
+                                    
                                 </div>
 
                                 <div className = "form-group">
+                                    {emailError&&<div className="err-msg">{emailError}</div>}
                                     <input type="text" name="email" id="email" autoComplete="off"
                                     value = {user.email}
                                     onChange = {handleInputs} 
@@ -84,6 +125,7 @@ const Signup = () => {
                                 </div>
 
                                 <div className = "form-group">
+                                    {contactError&&<div className="err-msg">{contactError}</div>} 
                                     <input type="text" name="phone" id="phone" autoComplete="off"
                                     value = {user.phone}
                                     onChange = {handleInputs} 
@@ -91,6 +133,7 @@ const Signup = () => {
                                 </div>
 
                                 <div className = "form-group">
+                                    {passwordError&&<div className="err-msg">{passwordError}</div>}
                                     <input type="text" name="password" id="password" autoComplete="off"
                                     value = {user.password}
                                     onChange = {handleInputs} 
@@ -98,6 +141,7 @@ const Signup = () => {
                                 </div>
 
                                 <div className = "form-group">
+                                    {cpasswordError&&<div className="err-msg">{cpasswordError}</div>}
                                     <input type="text" name="cpassword" id="cpassword" autoComplete="off"
                                     value = {user.cpassword}
                                     onChange = {handleInputs} 
