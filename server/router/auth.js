@@ -154,28 +154,35 @@ router.post('/add-todo-task', authenticate,async (req,res)=>{
 //EDIT DATA
 router.put('/edit-task', authenticate, async(req,res)=>{
     console.log('EDIT Task Page PAGE');
-    var { oldTaskName, newTaskName } = req.body;
+    var { _id,taskName } = req.body;
     console.log(req.body);
-    if( !oldTaskName|| !newTaskName ){
+    if( !_id|| !taskName ){
         console.log("Field is Required");
         return res.status(422).json({error:"Field is Required"});
         }
     const user = req.userID;
     console.log(req.body);
-    console.log("oldTaskName", oldTaskName);
-    console.log("newTaskName", newTaskName);
-    const updatedTask =  await Task.findOneAndReplace({task_name:oldTaskName.toLowerCase()}, {user_id:user, task_name:newTaskName.toLowerCase()});
+    console.log("oldTaskName", _id);
+    console.log("newTaskName", taskName);
+    const updatedTask =  await Task.findOneAndReplace({_id:_id}, {user_id:user, task_name:taskName.toLowerCase()});
     console.log(updatedTask);
     res.send(updatedTask);
 });
 
 router.delete('/delete-task',  async(req,res)=>{
     console.log("In delete.");
-    var { taskName } = req.body;
-    console.log(req.body);
-    console.log("taskName:",taskName);
-    const deletedTask =  await Task.findOneAndDelete({task_name:taskName.toLowerCase()});
-    console.log(deletedTask);
-    res.send(deletedTask);
+    var { _id } = req.body;
+    try {
+        console.log(req.body);
+        console.log("_id:",_id);
+        const deletedTask =  await Task.findOneAndDelete({_id:_id});
+        console.log(deletedTask);
+        res.send(deletedTask);
+    }
+    catch(err){
+        res.status(200).json({ error: err.message});
+    
+    }
 });
+
 module.exports=router;

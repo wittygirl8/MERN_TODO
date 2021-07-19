@@ -1,7 +1,5 @@
 import './App.css';
 import { Route } from 'react-router-dom'
-import Navbar from './components/Navbar';
-import Home from './components/Home';
 import Todo from './components/Todo';
 import Add_Task from './components/Add_task'
 import Signin from './components/Signin';
@@ -12,7 +10,6 @@ import Delete from "./components/deleteTask"
 function App() {
   return (
     <>
-    {/* <Navbar/> */}
       <Route exact path="/">
         <Signup/>
       </Route>

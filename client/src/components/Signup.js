@@ -23,6 +23,19 @@ const Signup = () => {
         //Object Destructuring
         const { name, email, phone,password,cpassword } = user;
 
+        if((email.indexOf('@')<=0) || (email.charAt(email.length - 4)!=".")&&(email.charAt(email.length - 4)!=".")){
+            window.alert("Invalid Mail");
+            return false;
+        }
+        if(password != cpassword){
+            window.alert("password doesn't match with current password");
+            return false;
+        }
+        if(password.length<6){
+            window.alert("password mus be minimum 6 digit long");
+            return false;
+        }
+
         const res = await fetch("/register", {
             method:"POST",
             headers:{

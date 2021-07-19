@@ -49,6 +49,9 @@ const DeleteTask = () => {
                                     <input type="text" name="taskName" id="taskName" autoComplete="off" placeholder="re-enter the task name"
                                         value = {taskName}
                                     onChange = {(e) => setDelTaskName(e.target.value)} />
+                                    <input type="text" name="taskName" id="taskName" autoComplete="off" placeholder="re-enter the task name"
+                                        value = {taskName}
+                                    onChange = {(e) => setDelTaskName(e.target.value)} />
                                 </div>
 
                                 <div className = "form-group form-button">
